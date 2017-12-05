@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}{% endblock title %}</title>
+
+    <!-- static css -->
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/justified-nav.css' %}" rel="stylesheet">
+
+
+    <!-- static javascripts -->
+    <script src="{% static 'javascripts/jquery.min.js' %}"></script>
+    <script src="{% static 'javascripts/bootstrap.js' %}"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $('.dropdown-toggle').dropdown();
+    });
+    </script>
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+    <style type="text/css">
+      p,h1,h2,h3,h4,h5,a{
+        font-family: 'Varela Round', sans-serif;
+      }
+      .foot{
+        color: #fff;
+      }
+      .fontwhite{
+        color: #fff;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <nav>
+          <ul class="nav nav-justified" style="background: #4caf50c7">
+            <li><a href="/" class="fontwhite">MedHUB</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'logout' %}" class="fontwhite">Logout</a></li>
+            {% else %}
+            <li><a href="{% url 'login' %}" class="fontwhite">Login</a></li>
+            <li><a href="{% url 'register' %}" class="fontwhite">Register</a></li>
+            {% endif %}
+            <li><a href="{% url 'most_voted_question' %}" class="fontwhite">Most VOTED Question</a></li>
+            <li><a href="{% url 'most_voted_question_last_hour' %}" class="fontwhite">HOURS's TOP</a></li>
+
+          </ul>
+        </nav>
+      </div>
+
+      {% block content %}
+      {% endblock content %}
+
+    </div>
+    <br>
+    <br>
+    <br>
+    <footer class="navbar-default" style="background-color: #333;">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4">
+          <br>
+          <br>
+          <p class="foot">Top question</p>
+          <p class="foot">About Q&A</p>
+          <p class="foot">Contact us</p>
+          <p class="foot">Support</p>
+          <br>
+          </div>
+          <div class="col-lg-4"></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+
+</html>

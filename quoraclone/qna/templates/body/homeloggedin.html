@@ -1,0 +1,83 @@
+{% extends 'nav/nav.html' %}
+
+{% block title %}Welcome to our Q & A demo website!{% endblock %}
+
+{% block content %}
+
+<style type="text/css">
+	input{
+		border-radius: 5px;
+		border: 1px solid #efefef;
+		height: 30px;
+	}
+	li{
+		list-style-type: none; 
+	}
+	.helptext{
+		display: none;
+	}
+	.marginfit{
+		margin-left: auto;
+		margin-right: auto;
+		width: 50%;
+	}
+	.question-box{
+		min-height: 150px;
+	}
+</style>
+<br>
+<div class="row marginfit">
+	<div class="text-center">
+	<h4> What do you wanna know?</h4>
+	<br>
+		<form method="post">
+			{% csrf_token %}
+			{{ form.title.errors }}
+			{{ success_message }}
+			{{ form.title }}
+			<button class="btn btn-primary" type="submit">ASK</button>
+		</form>
+	</div>
+</div>
+<br>
+<div class="row">
+<h3 style="text-align: center; text-decoration: underline;">BROWSE TRENDING QUESTION</h3>
+<br>
+	{% for question in question_list %}
+	<div style="margin-left: 20px; margin-right: 20px;">
+	<h4><a href="{% url 'question' question.id %}" style="color: #4caf50; font-weight: bold; font-family: 'Varela Round', sans-serif;">Q: {{ question.title }}</a></h4>
+	<br>{% if question.question_name.first != None %}
+	<p><strong>A: {{ question.question_name.first|truncatechars:250 }}</strong></p>
+	<p style="text-align: right;">Answered by - <a href="{% url 'profile' question.question_name.first.answer_by.username %}">{{ question.question_name.first.answer_by.username }}</p>
+	{% endif %}
+	<br>
+	<p><a href="{% url 'question' question.id %}" style="color: #63a4b4d4;"><strong>View all answers({{ question.question_name.count }})</strong></a> &nbsp &nbsp <a style="color: #ff5722; font-style: bold; text-decoration: none;">
+	<strong>Upvotes({{ question.upvoted_question.count }})</strong></a> </p>
+	</div>
+	{% endfor %}
+</div>
+<div class="row text-center">
+	{% if question_list.has_other_pages %}
+	  <ul class="pagination">
+	    {% if question_list.has_previous %}
+	      <li><a href="?page={{ question_list.previous_page_number }}">&laquo;</a></li>
+	    {% else %}
+	      <li class="disabled"><span>&laquo;</span></li>
+	    {% endif %}
+	    {% for i in question_list.paginator.page_range %}
+	      {% if question_list.number == i %}
+	        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+	      {% else %}
+	        <li><a href="?page={{ i }}">{{ i }}</a></li>
+	      {% endif %}
+	    {% endfor %}
+	    {% if question_list.has_next %}
+	      <li><a href="?page={{ question_list.next_page_number }}">&raquo;</a></li>
+	    {% else %}
+	      <li class="disabled"><span>&raquo;</span></li>
+	    {% endif %}
+	  </ul>
+	{% endif %}
+</div>
+
+{% endblock %}

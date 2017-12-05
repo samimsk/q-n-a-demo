@@ -1,0 +1,20 @@
+{% extends 'nav/nav.html' %}
+
+{% block title %}Welcome to {{ user_details }}'s profile!{% endblock %}
+
+{% block content %}
+
+<br>
+<br>
+<div class="row text-center">
+	<p>This people have upvoted the question:</p>
+	<br>
+	<br>
+	{% for voters in upvoters_list %}
+	<div class="text-center">
+	<p>{{ voters.upvoted_by.username }}
+	</div>
+	{% endfor %}
+</div>
+
+{% endblock %}

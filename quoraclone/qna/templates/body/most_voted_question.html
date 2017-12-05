@@ -1,0 +1,18 @@
+{% extends 'nav/nav.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+
+<br>
+<br>
+<div class="row text-center">
+	<h4>Most Upvoted question</h4>
+	<br>
+	{% if most_upvoted_question %}
+	<h4 style="color: #4caf50;">{{ most_upvoted_question.title }}</h4>
+	<p>Upvotes({{ most_upvoted_question.upvoted_question.count }}) &nbsp &nbsp<a href="{% url 'question' most_upvoted_question.id %}"> Answers({{ most_upvoted_question.question_name.count }})
+	{% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'nav/nav.html' %}
+
+{% block title %}Question no: {{ question.id }}. Asked by {{ question.question_by }}{% endblock %}
+
+{% block content %}
+
+<style type="text/css">
+	li{
+		list-style-type: none; 
+	}
+</style>
+
+<div class="row text-center">
+	<br>
+	<h3 style="font-weight: bold; color: #4caf50">{{ question.title }}</h3>
+	<br>
+	<p>Question asked by <strong><a href="{% url 'profile' question.question_by %}">{{ question.question_by }}</a></strong>&nbsp &nbsp &nbsp Date: <strong>{{ question.time }}</strong>&nbsp &nbsp &nbsp Total upvote count: <strong>({{ question.upvoted_question.count }})</strong></p>
+</div>
+<br>
+<div class="row">
+	<div class="text-center" style="margin-left: 20%; margin-right: 20%;">
+	<h4>Can you answer this question?</h4>
+	<br>
+		<form method="post">
+			{% csrf_token %}
+			{{ success_message }}
+			{{ form.detail.errors }}
+			{{ form.detail }}
+			<button class="btn btn-primary" type="submit">Post answer</button>
+		</form>
+	</div>
+</div>
+
+{% for answer in question.question_name.all %}
+<div class="row" style="padding-left: 50px; padding-right: 50px;">
+	<br>
+	<p>Answered by: <a href="{% url 'profile' answer.answer_by.username %}">{{ answer.answer_by }}</a></p>
+	<p style="font-weight: bold;">{{ answer.detail }}</p>
+	{{ answer.votingcheck }}
+	<p>{% for voter in answer.upvoted_answer.all  %}
+		{% if voter.upvoted_by == user %}
+		<a href="{% url 'remove_upvote' answer.id %}">
+			<button class="btn btn-default">Upvoted({{ answer.upvoted_answer.count }})
+			</button>
+
+		</a>
+		{% elif forloop.last == True %}
+		<a href="{% url 'upvote' answer.id %}">
+			<button class="btn btn-primary">Upvote({{ answer.upvoted_answer.count }})
+			</button>
+		</a>
+		{% endif %}
+	    {% endfor %}
+	    {% if answer.upvoted_answer.count == 0 %}
+		<a href="{% url 'upvote' answer.id %}">
+			<button class="btn btn-primary">Upvote({{ answer.upvoted_answer.count }})
+			</button>
+		</a>
+	    {% endif %}
+	    &nbsp &nbsp <a href="{% url 'upvoters_list' answer.id %}" style="color: #ff5722;">View Upvotes</a>
+		&nbsp &nbsp Answer given on: {{ answer.time }}
+	</p>
+</div>
+{% endfor %}
+
+{% endblock %}

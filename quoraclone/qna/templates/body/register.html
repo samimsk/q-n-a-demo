@@ -1,0 +1,42 @@
+{% extends 'nav/nav.html' %}
+
+{% block title %}Sign up!{% endblock %}
+
+{% block content %}
+
+<style type="text/css">
+	input{
+		border-radius: 5px;
+		border: 1px solid #efefef;
+		height: 30px;
+	}
+	li{
+		list-style-type: none; 
+	}
+</style>
+
+<br>
+<br>
+<style type="text/css">
+	.helptext{
+		display: none;
+	}
+	.marginfit{
+		margin-left: auto;
+		margin-right: auto;
+		width: 30%;
+	}
+</style>
+<div class="row marginfit">
+	<div class="">
+	<h4> What do you wanna know?</h4>
+	<br>
+		<form method="post">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<button class="btn btn-primary" type="submit">Register</button>
+		</form>
+	</div>
+</div>
+
+{% endblock %}

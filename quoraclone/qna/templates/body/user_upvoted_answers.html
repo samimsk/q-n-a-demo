@@ -1,0 +1,55 @@
+{% extends 'nav/nav.html' %}
+
+{% block title %}Welcome to {{ user_details }}'s profile!{% endblock %}
+
+{% block content %}
+
+<br>
+<br>
+<div class="row text-center">
+	<div>
+		<p><a href="{% url 'profile' user_details.username %}">View {{ user_details }}'s question</a> &nbsp &nbsp
+		<a href="{% url 'user_answers' user_details.username %}">View {{ user_details }}'s answers</a></p>
+	</div>
+</div>
+<br>
+<div class="row text-center">
+	<h4 style="font-weight: bold;">{{ user_details }}'s activities</h4>
+	<br>
+	<br>
+	{% for votes in upvoted_answers_list %}
+	<div class="text-center" style="margin-left: 20%; margin-right: 20%; padding: 20px;">
+	<p style="text-align: left; font-weight: bold;"> {{ user_details }} have upvoted this answer &nbsp-</p><br>
+	<p><a href="{% url 'profile' votes.upvoted_answer.answer_by.username %}">{{ votes.upvoted_answer.answer_by }}</a> answered this on {{ votes.upvoted_answer.time }}</p> 
+	<p style="text-align: left; font-weight: bold;">A : &nbsp &nbsp &nbsp{{ votes.upvoted_answer.detail }}</p>
+	<p style="font-size: 12px; text-align: left;">Q :&nbsp &nbsp &nbsp{{ votes.upvoted_question.title }}</p>
+	</div>
+	<br>
+	{% endfor %}
+</div>
+
+<div class="row text-center">
+	{% if upvoted_answers_list.has_other_pages %}
+	  <ul class="pagination">
+	    {% if upvoted_answers_list.has_previous %}
+	      <li><a href="?page={{ answer_list.previous_page_number }}">&laquo;</a></li>
+	    {% else %}
+	      <li class="disabled"><span>&laquo;</span></li>
+	    {% endif %}
+	    {% for i in upvoted_answers_list.paginator.page_range %}
+	      {% if upvoted_answers_list.number == i %}
+	        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+	      {% else %}
+	        <li><a href="?page={{ i }}">{{ i }}</a></li>
+	      {% endif %}
+	    {% endfor %}
+	    {% if upvoted_answers_list.has_next %}
+	      <li><a href="?page={{ upvoted_answers_list.next_page_number }}">&raquo;</a></li>
+	    {% else %}
+	      <li class="disabled"><span>&raquo;</span></li>
+	    {% endif %}
+	  </ul>
+	{% endif %}
+</div>
+
+{% endblock %}

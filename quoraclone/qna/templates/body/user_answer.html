@@ -1,0 +1,54 @@
+{% extends 'nav/nav.html' %}
+
+{% block title %}Welcome to {{ user_details }}'s profile!{% endblock %}
+
+{% block content %}
+
+<br>
+<br>
+<div class="row text-center">
+	<div>
+		<p><a href="{% url 'profile' user_details.username %}">View {{ user_details }}'s question</a> &nbsp &nbsp
+		<a href="{% url 'users_upvotes' user_details.username %}">View {{ user_details }}'s upvotes</a></p>
+	</div>
+</div>
+<br>
+<div class="row text-center">
+	<h4 style="font-weight: bold;">Answer given by {{ user_details }}</h4>
+	<br>
+	<br>
+	{% for ans in answers_list %}
+	<div class="text-center" style="margin-left: 20%; margin-right: 20%; border-bottom: 2px solid #eee;">
+	<h4 style="text-align: left;">A : &nbsp  &nbsp {{ ans.detail }}</h4>
+	<p style="font-size: 12px; text-align: left;"><a href="/qid={{ ans.question_name.id }}/" style="color: #4caf50; text-decoration: none;">Q : &nbsp  &nbsp  {{ ans.question_name.title }}</a></p>
+	<p style="font-size: 12px; text-align: left;"><a href="{% url 'upvoters_list' ans.id %}">Upvotes({{ ans.upvoted_answer.count }})</a> &nbsp &nbsp {{ ans.time }} </p>
+	</div>
+	<br>
+	{% endfor %}
+</div>
+
+<div class="row text-center">
+	{% if answer_list.has_other_pages %}
+	  <ul class="pagination">
+	    {% if answer_list.has_previous %}
+	      <li><a href="?page={{ answer_list.previous_page_number }}">&laquo;</a></li>
+	    {% else %}
+	      <li class="disabled"><span>&laquo;</span></li>
+	    {% endif %}
+	    {% for i in answer_list.paginator.page_range %}
+	      {% if answer_list.number == i %}
+	        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+	      {% else %}
+	        <li><a href="?page={{ i }}">{{ i }}</a></li>
+	      {% endif %}
+	    {% endfor %}
+	    {% if answer_list.has_next %}
+	      <li><a href="?page={{ answer_list.next_page_number }}">&raquo;</a></li>
+	    {% else %}
+	      <li class="disabled"><span>&raquo;</span></li>
+	    {% endif %}
+	  </ul>
+	{% endif %}
+</div>
+
+{% endblock %}
